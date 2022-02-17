@@ -1,0 +1,43 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Protect feedback
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  pull_request:
+    types: [opened, reopened]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  protect:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: GitHub API Request
+      # You may pin to the exact commit or the version.
+      # uses: octokit/request-action@7e93b91076fad3920c29d44eb2a6311d929db3dd
+      uses: octokit/request-action@v2.1.0
+      with:
+        # HTTP Verb + path as shown on https://developer.github.com/v3/
+        route: PUT /repos/{owner}/{repo}/branches/{branch}/protection
+        branch: feedback
+        required_status_checks:
+          strict: false
+          contexts:
+          - GitHub Classroom Workflow
+        enforce_admins: false
+        required_pull_request_reviews:
+          dismissal_restrictions: null
+          required_approving_review_count: 1
+        restrictions: null
+        allow_force_pushes: true
+        
+
+          
